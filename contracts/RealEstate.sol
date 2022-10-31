@@ -18,7 +18,7 @@ contract RealEstate is Ownable {
     }
 
     modifier onlyOwners() {
-        require(_admins[owner()] == _msgSender(), "Ownable: caller is not the owner");
+        require(_admins[owner()] == msg.sender, "Ownable: caller is not the owner");
         _;
     }
 
@@ -45,17 +45,18 @@ contract RealEstate is Ownable {
         _admins[_newOwner] = _newOwner;
     }
 
-    function isOwner(address userAddress_) public view returns(address) {
+    function isOwner(address userAddress_) public view returns(bool) {
         require(userAddress_ !=address(0), "Address should not be null");
-       return _admins[userAddress_];
+        return _admins[userAddress_] == userAddress_;
     }
 
     function getUserAccountBalance() public view returns(uint256) {
         return (msg.sender).balance;
     }
-    
-    function getUserAccountHistory(address userAddress_) public view returns(uint256) {
-        return (msg.sender).balance;
+
+    function getContractBalance() public view returns(uint256) {
+        return (address(this)).balance;
     }
+    
 
 }
